@@ -1,3 +1,6 @@
+edge.runtime.onInstalled.addListener(() => {
+    edge.storage.local.get({rotateButton});
+  });
 
 function rotateImageFun(){
     var currentLocation = window.location.href;
