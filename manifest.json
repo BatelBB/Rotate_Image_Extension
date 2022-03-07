@@ -9,8 +9,7 @@
     "permissions": [
         "contextMenus",
         "scripting",
-        "activeTab",
-        "<all_urls>"
+        "activeTab"
     ],
     "host_permissions": [
         "*://web.whatsapp.com/*"
