@@ -1,18 +1,14 @@
 {
-    "name": "Image Rotator",
+    "name": "WhatsApp Web Image Rotator",
     "version": "1.0",
     "manifest_version": 3,
-    "description": "An extension to rotate images in web page.",
+    "description": "An extension that uses the context menu to rotate images from Whatsapp Web.",
     "background": {
         "service_worker": "src/background.js"
     },
     "permissions": [
         "contextMenus",
-        "scripting",
         "activeTab"
-    ],
-    "host_permissions": [
-        "*://web.whatsapp.com/*"
     ],
     "content_scripts": [
         {
