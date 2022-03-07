@@ -4,31 +4,17 @@
     "manifest_version": 3,
     "description": "An extension to rotate images in web page.",
     "background": {
-        "service_worker": "src/background.js"
-      },
-      "content_scripts": [
-        {
-          "matches": [
-            "*://*/*"
-          ],
-          "js": ["src/content_script.js"],
-          "run_at": "document_end"
-        }
-      ],
-      "permissions": ["storage", "activeTab"],
-      "action": {
-        "default_popup": "src/popup.html",
-        "default_icon": {
-            "16": "icons/rotate-image-icon-16.jpg",
-            "32": "icons/rotate-image-icon-48.jpg",
-            "48": "icons/rotate-image-icon-48.jpg",
-            "128": "icons/rotate-image-icon-128.jpg"
-        }
-      },
-      "icons": {
-        "16": "icons/rotate-image-icon-16.jpg",
-        "32": "icons/rotate-image-icon-48.jpg",
-        "48": "icons/rotate-image-icon-48.jpg",
-        "128": "icons/rotate-image-icon-128.jpg"
+      "service_worker": "src/background.js"
+    },
+    "permissions": ["contextMenus","scripting","storage", "declarativeContent", "activeTab","<all_urls>"],
+    "host_permissions": [
+      "*://web.whatsapp.com/*"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["*://web.whatsapp.com/*"],
+        "match_origin_as_fallback": true,
+        "js": ["src/contentScript.js"]
       }
-}
+    ]
+  }
