@@ -19,3 +19,7 @@ try{
 } catch (e) {
     console.error(e);
 }
+
+if (chrome.runtime) {
+    chrome.runtime.setUninstallURL("https://forms.gle/K1v6S13SnPKzsE2b7"); // a google form that opens if the user uninstalls the extension
+  }
