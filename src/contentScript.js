@@ -1,11 +1,14 @@
 let rotation = 0;
-
+let flagZomm = true;
 
 function rotateImageClockWise() {
-  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-out"){ // in case the image is zoomed in
+  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-out" && flagZomm == true){ // in case the image is zoomed in
     rotation = 0;
+    flagZomm = false;
   }
-
+  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-in" && flagZomm == false){// in case the image is back to zoom out, reset the flag
+    flagZomm = true;
+  }
   rotation += 90; // everytime the button is clicked it rotates one more time.
   document.getElementsByTagName("img")[0].style.transform = 'rotate(' + rotation + 'deg)'; // getElementsByTageName - because there is no id tag
   if (rotation >= 360) {
@@ -15,10 +18,13 @@ function rotateImageClockWise() {
 };
 
 function rotateImageAntiClockWise() {
-  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-out"){ // in case the image is zoomed in
+  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-out" && flagZomm == true){ // in case the image is zoomed in
     rotation = 0;
+    flagZomm = false;
   }
-
+  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-in" && flagZomm == false){// in case the image is back to zoom out, reset the flag
+    flagZomm = true;
+  }
   rotation -= 90; // everytime the button is clicked it rotates one more time.
   document.getElementsByTagName("img")[0].style.transform = 'rotate(' + rotation + 'deg)'; // getElementsByTageName - because there is no id tag
   if (rotation <= -360) {
