@@ -1,14 +1,13 @@
 {
     "name": "Messaging Network Image Rotator",
-    "version": "1.3",
+    "version": "1.5",
     "manifest_version": 3,
     "description": "An extension that uses the context menu to rotate images from Messaging Network.",
     "background": {
         "service_worker": "src/background.js"
     },
     "permissions": [
-        "contextMenus",
-        "activeTab"
+        "contextMenus"
     ],
     "content_scripts": [
         {
