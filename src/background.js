@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(() => { // Once the extension is created,
 
     chrome.contextMenus.create({
         "id": "anti-clock-wise",
-        "title": "Rotate Anti-Clock-Wise",
+        "title": "Rotate Counterclockwise",
         "parentId": "parent",
         "contexts": ["image"]
     }); 
@@ -33,6 +33,22 @@ try{
         if(info.menuItemId === "anti-clock-wise"){ // if the user clicked on the correct item
             chrome.tabs.query({active: true, currentWindow: true}, function (tabs) { // it takes the active tab
                 chrome.tabs.sendMessage(tabs[0].id, { // sends a message with the tab id and the "rotateImage" type
+                    type: "rotateImageAntiClockWise",
+                });
+            });
+        }
+    });
+    chrome.commands.onCommand.addListener((command) => {
+        if(command === "rotate_clockwise") {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    type: "rotateImageClockWise",
+                });
+            });
+        }
+        if(command === "rotate_counterclockwise") {
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {
                     type: "rotateImageAntiClockWise",
                 });
             });

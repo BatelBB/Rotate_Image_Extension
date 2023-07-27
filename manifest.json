@@ -1,14 +1,31 @@
 {
-    "name": "Messaging Network Image Rotator",
+    "name": "Image Rotator for WhatsApp™ Web",
     "version": "1.5",
     "manifest_version": 3,
-    "description": "An extension that uses the context menu to rotate images from Messaging Network.",
+    "description": "An unofficial extension that uses the context menu to rotate images from WhatsApp™ Web.",
     "background": {
         "service_worker": "src/background.js"
     },
     "permissions": [
-        "contextMenus"
+        "contextMenus",
+        "activeTab"
     ],
+    "commands": {
+        "rotate_clockwise": {
+          "suggested_key": {
+            "default": "Ctrl+Shift+Right",
+            "mac": "MacCtrl+Shift+Right"
+          },
+          "description": "Rotate Image Clockwise"
+        },
+        "rotate_counterclockwise": {
+          "suggested_key": {
+            "default": "Ctrl+Shift+Left",
+            "mac": "MacCtrl+Shift+Left"
+          },
+          "description": "Rotate Image Counterclockwise"
+        }
+      },
     "content_scripts": [
         {
             "matches": [
