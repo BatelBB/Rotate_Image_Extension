@@ -1,69 +1,60 @@
-let rotationAngle = 0;
-let flagZomm = true;
+let currentRotation = 0;
 
-function rotateImageClockWise() {
-  fixZoomRotation();
-  rotationAngle += 90; // everytime the button is clicked it rotates one more time.
-  rotateImage(rotationAngle);; // getElementsByTageName - because there is no id tag
-  if (rotationAngle >= 360) {
-  	rotationAngle = 0;
-  }
-};
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    let img = getImageElement();
+    if (!img) return;
 
-function rotateImageAntiClockWise() {
-  fixZoomRotation();
-  rotationAngle -= 90; // everytime the button is clicked it rotates one more time.
-  rotateImage(rotationAngle);
-  if (rotationAngle <= -360) {
-  	rotationAngle = 0;
-  }
-};
-
-
-function rotateImage(angle) {
-  const images = document.querySelectorAll("img");
-  images.forEach((image) => {
-    if (image.src.startsWith("blob")) {
-      image.style.transform = `rotate(${angle}deg)`;
+    if (request.action === "rotateClockwise") {
+        currentRotation += 90;
+    } else if (request.action === "rotateCounterclockwise") {
+        currentRotation -= 90;
     }
-  });
+
+    applyRotation(img, currentRotation);
+});
+
+function getImageElement() {
+    return document.querySelector('img[src^="blob:https://web.whatsapp.com/"]');
 }
 
-document.addEventListener("wheel", (event) => {
-  if (event.ctrlKey) {
-    event.preventDefault();
-    const delta = event.deltaY > 0 ? -1 : 1;
-    const scale = 1 + delta * 0.1;
-    const images = document.querySelectorAll("img");
-    images.forEach((image) => {
-      if (image.src.startsWith("blob") && image.style.transform) {
-        image.style.transform += `scale(${scale})`;
-      } else {
-        image.style.transform = `scale(${scale})`;
-      }
-    });
-    rotateImage(rotationAngle); // reapply the rotation after zooming
-  }
+function applyRotation(img, degrees) {
+    img.style.transform = 'rotate(' + degrees + 'deg)';
+}
+
+function getRotationDegrees(img) {
+    let matrix = window.getComputedStyle(img).getPropertyValue('transform');
+    if (matrix !== 'none') {
+        let values = matrix.split('(')[1].split(')')[0].split(',');
+        let a = values[0];
+        let b = values[1];
+        let angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+        return (angle < 0) ? angle + 360 : angle;
+    }
+    return 0;
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.tagName === 'IMG') {
+        setTimeout(function() {
+            let img = getImageElement();
+            if (img) {
+                applyRotation(img, currentRotation);
+            }
+        }, 5); // Adjust the timeout if necessary
+    }
 });
 
-chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) { // this waits for any message 
-	if (msg.type === 'rotateImageClockWise') { // onces there is a message with a type of "rotateImageClockWise"
-		rotateImageClockWise(); // it activates the function
-	}
-  if (msg.type === 'rotateImageAntiClockWise') { // onces there is a message with a type of "rotateImageAntiClockWise"
-		rotateImageAntiClockWise(); // it activates the function
-	}
-Promise.resolve("").then(result => sendResponse(result)); // to close the port of the listener
-return true;
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    let img = getImageElement();
+    if (!img) return;
+
+    if (request.type === "rotateClockwise") {
+        currentRotation += 90;
+    } else if (request.type === "rotateCounterclockwise") {
+        currentRotation -= 90;
+    }
+
+    applyRotation(img, currentRotation);
+    sendResponse({}); 
+    return true;
 });
-
-
-function fixZoomRotation(){
-  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-out" && flagZomm == true){ // in case the image is zoomed in
-    rotationAngle = 0;
-    flagZomm = false;
-  }
-  if(document.getElementsByTagName("img")[0].style.cursor == "zoom-in" && flagZomm == false){// in case the image is back to zoom out, reset the flag
-    flagZomm = true;
-  }
-};
